@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:weather_app/data_sources/api/weather_api.dart';
@@ -22,7 +24,7 @@ class _LocationScreenState extends State<LocationScreen> {
         );
       }));
     } catch (error) {
-      print('$error');
+      log('$error');
     }
   }
 

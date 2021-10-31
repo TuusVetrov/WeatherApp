@@ -3,10 +3,12 @@ import 'package:weather_app/core/utils/converters.dart';
 class WeatherForecastEntity {
   final CurrentForecastEntity current;
   final List<HourlyForecastEntity> hourly;
+  final List<DailyForecastEntity> daily;
 
   WeatherForecastEntity({
     required this.current,
     required this.hourly,
+    required this.daily,
   });
 }
 
@@ -50,6 +52,19 @@ class HourlyForecastEntity {
     required this.temperature,
     required this.weather,
   });
+}
+
+class DailyForecastEntity {
+  final int dt;
+  final Temperature minTemperature;
+  final Temperature maxTemperature;
+  final List<WeatherEntity> weather;
+
+  DailyForecastEntity(
+      {required this.dt,
+      required this.minTemperature,
+      required this.maxTemperature,
+      required this.weather});
 }
 
 class WeatherEntity {

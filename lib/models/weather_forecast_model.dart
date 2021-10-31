@@ -5,15 +5,21 @@ class WeatherForecastModel extends WeatherForecastEntity {
   WeatherForecastModel({
     required CurrentForecastEntity current,
     required List<HourlyForecastEntity> hourly,
+    required List<DailyForecastEntity> daily,
   }) : super(
           current: current,
           hourly: hourly,
+          daily: daily,
         );
 
   factory WeatherForecastModel.fromJson(Map<String, dynamic> json) {
     return WeatherForecastModel(
       current: CurrentForecastModel.fromJson(
           json['current'] as Map<String, dynamic>),
+      daily: (json['daily'] as List<dynamic>)
+          .map((dynamic e) =>
+              DailyForecastModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       hourly: (json['hourly'] as List<dynamic>)
           .map((dynamic e) =>
               HourlyForecastModel.fromJson(e as Map<String, dynamic>))
@@ -86,6 +92,30 @@ class HourlyForecastModel extends HourlyForecastEntity {
     return HourlyForecastModel(
       dt: json['dt'] as int,
       temperature: Temperature(jsonToDouble(json['temp'])),
+      weather: (json['weather'] as List<dynamic>)
+          .map((dynamic e) => WeatherModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+}
+
+class DailyForecastModel extends DailyForecastEntity {
+  DailyForecastModel({
+    required int dt,
+    required Temperature minTemperature,
+    required Temperature maxTemperature,
+    required List<WeatherEntity> weather,
+  }) : super(
+            dt: dt,
+            minTemperature: minTemperature,
+            maxTemperature: maxTemperature,
+            weather: weather);
+
+  factory DailyForecastModel.fromJson(Map<String, dynamic> json) {
+    return DailyForecastModel(
+      dt: json['dt'] as int,
+      minTemperature: Temperature(jsonToDouble(json['temp']['min'])),
+      maxTemperature: Temperature(jsonToDouble(json['temp']['max'])),
       weather: (json['weather'] as List<dynamic>)
           .map((dynamic e) => WeatherModel.fromJson(e as Map<String, dynamic>))
           .toList(),

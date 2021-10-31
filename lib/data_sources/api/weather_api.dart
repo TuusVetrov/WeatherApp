@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/core/utils/location.dart';
 import 'package:weather_app/models/coordinates_model.dart';
@@ -8,18 +7,18 @@ import 'package:weather_app/models/coordinates_model.dart';
 import 'package:weather_app/models/weather_forecast_model.dart';
 
 class AllWeatherData {
-  final CoordinatesModel coordinatesModel;
+  final CityInfoModel cityInfoModel;
   final WeatherForecastModel weatherForecastModel;
 
   AllWeatherData(
-      {required this.coordinatesModel, required this.weatherForecastModel});
+      {required this.cityInfoModel, required this.weatherForecastModel});
 }
 
 class WeatherApi {
   static const String _apiKey = '4d894ffc32ae5e364ba54281f7e7889a';
 
   Future<AllWeatherData> getWeatherData({String? cityName}) async {
-    CoordinatesModel location;
+    CityInfoModel location;
     if (cityName == null) {
       location = await getCityInfo();
     } else {
@@ -28,7 +27,7 @@ class WeatherApi {
     var weather =
         await getWeatherDataByLocation(location.latitude, location.longitude);
     return AllWeatherData(
-        coordinatesModel: location, weatherForecastModel: weather);
+        cityInfoModel: location, weatherForecastModel: weather);
   }
 
   Future<WeatherForecastModel> getWeatherDataByLocation(
@@ -58,7 +57,7 @@ class WeatherApi {
     return WeatherForecastModel.fromJson(infoJson);
   }
 
-  Future<CoordinatesModel> getCityInfo({String? cityName}) async {
+  Future<CityInfoModel> getCityInfo({String? cityName}) async {
     Map<String, String> queryParameters;
 
     // if we do not specify the name of the city, we take
@@ -96,6 +95,6 @@ class WeatherApi {
 
     final infoJson = json.decode(response.body) as Map<String, dynamic>;
 
-    return CoordinatesModel.fromJson(infoJson);
+    return CityInfoModel.fromJson(infoJson);
   }
 }

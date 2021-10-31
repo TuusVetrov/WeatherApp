@@ -99,3 +99,107 @@ class WindDegrees {
 double jsonToDouble(dynamic value) {
   return value.toDouble() as double;
 }
+
+DateTime getTimeForamted(int timeEpoch) {
+  return DateTime.fromMillisecondsSinceEpoch(timeEpoch * 1000);
+}
+
+bool isDayTheme(int sunsetTimeEpoch, int sunriseTimeEpoch) {
+  var currentTime = getTimeForamted(DateTime.now().millisecondsSinceEpoch);
+  var sunriseTime = getTimeForamted(sunriseTimeEpoch);
+  var sunsetTime = getTimeForamted(sunsetTimeEpoch);
+
+  if ((currentTime.hour > sunsetTime.hour &&
+          currentTime.minute > sunsetTime.minute) &&
+      (currentTime.hour < sunriseTime.hour &&
+          currentTime.minute < sunriseTime.minute)) {
+    return false;
+  }
+  return true;
+}
+
+// look at this dude)))
+String weatherConditionMapper(
+    int sunsetTimeEpoch, int sunriseTimeEpoch, int iconId, bool useSmallIcons) {
+  var isDayTime = isDayTheme(sunsetTimeEpoch, sunriseTimeEpoch);
+
+  // Thunderstorm
+  if (iconId >= 200 && iconId <= 232) {
+    if (!useSmallIcons) {
+      return 'assets/images/main_icons/thunderstorm.svg';
+    } else {
+      return 'assets/images/small_icons/thunderstorm.svg';
+    }
+  }
+
+  // ShowerRain
+  if ((iconId >= 300 && iconId <= 321) || (iconId >= 520 && iconId <= 531)) {
+    if (!useSmallIcons) {
+      return 'assets/images/main_icons/shower_rain.svg';
+    } else {
+      return 'assets/images/small_icons/shower_rain.svg';
+    }
+  }
+
+  // Rain
+  if (iconId >= 500 && iconId <= 504) {
+    if (!useSmallIcons) {
+      return 'assets/images/main_icons/rain.svg';
+    } else {
+      return 'assets/images/small_icons/rain.svg';
+    }
+  }
+  // Snow
+  if ((iconId >= 600 && iconId <= 622) || iconId == 511) {
+    if (!useSmallIcons) {
+      return 'assets/images/main_icons/snow.svg';
+    } else {
+      return 'assets/images/small_icons/snow.svg';
+    }
+  }
+
+  // Atmosphere
+  if (iconId >= 701 && iconId <= 781) {
+    if (!useSmallIcons) {
+      return 'assets/images/main_icons/mist.svg';
+    } else {
+      return 'assets/images/small_icons/mist.svg';
+    }
+  }
+
+  // Clear
+  if (iconId == 800) {
+    if (!useSmallIcons) {
+      return isDayTime
+          ? 'assets/images/main_icons/clear_sky_day.svg'
+          : 'assets/images/main_icons/clear_sky_night.svg';
+    } else {
+      return isDayTime
+          ? 'assets/images/small_icons/clear_sky_day.svg'
+          : 'assets/images/small_icons/clear_sky_night.svg';
+    }
+  }
+
+  // Clouds
+  if (iconId == 801) {
+    if (!useSmallIcons) {
+      return isDayTime
+          ? 'assets/images/main_icons/few_clouds.svg'
+          : 'assets/images/main_icons/few_clouds_night.svg';
+    } else {
+      return isDayTime
+          ? 'assets/images/small_icons/few_clouds.svg'
+          : 'assets/images/small_icons/few_clouds_night.svg';
+    }
+  }
+
+  if (iconId >= 802 && iconId <= 804) {
+    if (!useSmallIcons) {
+      return 'assets/images/main_icons/scattered_clouds.svg';
+    } else {
+      return 'assets/images/small_icons/scattered_clouds.svg';
+    }
+  }
+
+  return '';
+}

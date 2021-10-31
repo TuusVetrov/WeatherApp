@@ -3,6 +3,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:weather_app/data_sources/api/weather_api.dart';
 import 'package:weather_app/screens/search_city_screen.dart';
+import 'package:weather_app/widgets/background.dart';
+import 'package:weather_app/widgets/weather_forecast_screen/current_weather.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
   final AllWeatherData weatherData;
@@ -60,24 +62,27 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
           )
         ],
       ),
-      body: SafeArea(
-        child: FutureBuilder<AllWeatherData>(
-          future: weatherForecast,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Text('${snapshot.data?.coordinatesModel.cityName}'),
-                ],
-              );
-            } else {
-              return const Center(
-                  child: SpinKitFadingCircle(
-                color: Colors.black,
-              ));
-            }
-          },
-        ),
+      body: FutureBuilder<AllWeatherData>(
+        future: weatherForecast,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              children: [
+                BackgroundView(
+                  snapshot: snapshot,
+                ),
+                CurrentWeatherView(
+                  snapshot: snapshot,
+                ),
+              ],
+            );
+          } else {
+            return const Center(
+                child: SpinKitFadingCircle(
+              color: Colors.black,
+            ));
+          }
+        },
       ),
     );
   }
