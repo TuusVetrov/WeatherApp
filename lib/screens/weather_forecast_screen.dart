@@ -3,8 +3,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:weather_app/data_sources/api/weather_api.dart';
 import 'package:weather_app/screens/search_city_screen.dart';
-import 'package:weather_app/widgets/background.dart';
+import 'package:weather_app/widgets/weather_forecast_screen/background.dart';
 import 'package:weather_app/widgets/weather_forecast_screen/current_weather.dart';
+import 'package:weather_app/widgets/weather_forecast_screen/select_forecast.dart';
+import 'package:weather_app/widgets/weather_forecast_screen/weather_forecast_item.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
   final AllWeatherData weatherData;
@@ -51,16 +53,6 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
             });
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.menu,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () {},
-          )
-        ],
       ),
       body: FutureBuilder<AllWeatherData>(
         future: weatherForecast,
@@ -70,9 +62,16 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
               children: [
                 BackgroundView(
                   snapshot: snapshot,
+                  scaleFactor: 0.66,
                 ),
                 CurrentWeatherView(
                   snapshot: snapshot,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 572),
+                  child: SelectForecastView(
+                    snapshot: snapshot,
+                  ),
                 ),
               ],
             );

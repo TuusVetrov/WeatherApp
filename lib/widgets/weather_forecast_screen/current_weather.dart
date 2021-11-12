@@ -30,7 +30,6 @@ class CurrentWeatherView extends StatelessWidget {
                 children: [
                   SvgPicture.asset(weatherConditionMapper(
                       snapshot.data!.weatherForecastModel.current.sunset,
-                      snapshot.data!.weatherForecastModel.current.sunrise,
                       snapshot.data!.weatherForecastModel.current.weather[0].id,
                       false)),
                   Padding(

@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 enum TemperatureUnit { kelvin, celsius, fahrenheit }
 enum WindSpeedUnit { meterSec, milesHour, kilometersHour }
 enum WindDegreesUnit { degrees, worldSides }
@@ -101,11 +104,32 @@ double jsonToDouble(dynamic value) {
 }
 
 DateTime getTimeForamted(int timeEpoch) {
-  return DateTime.fromMillisecondsSinceEpoch(timeEpoch * 1000);
+  return DateTime.fromMillisecondsSinceEpoch(timeEpoch * 1000).toLocal();
 }
 
-bool isDayTheme(int sunsetTimeEpoch, int sunriseTimeEpoch) {
+String getTime(int dt) {
+  return DateFormat('HH:mm')
+      .format(DateTime.fromMillisecondsSinceEpoch(dt * 1000).toLocal());
+}
+
+String getDay(int dt) {
+  return DateFormat('EEE').format(getTimeForamted(dt).toLocal());
+}
+
+bool isDayTheme(int sunsetTimeEpoch) {
   var currentTime = getTimeForamted(DateTime.now().millisecondsSinceEpoch);
+  var sunsetTime = getTimeForamted(sunsetTimeEpoch);
+
+  if ((currentTime.hour > sunsetTime.hour &&
+          currentTime.minute > sunsetTime.minute)) {
+    return false;
+  }
+  return true;
+}
+
+/* bool isDayTheme(int sunsetTimeEpoch, int sunriseTimeEpoch) {
+  var currentTime =
+      getTimeForamted(DateTime.now().toUtc().millisecondsSinceEpoch);
   var sunriseTime = getTimeForamted(sunriseTimeEpoch);
   var sunsetTime = getTimeForamted(sunsetTimeEpoch);
 
@@ -116,12 +140,12 @@ bool isDayTheme(int sunsetTimeEpoch, int sunriseTimeEpoch) {
     return false;
   }
   return true;
-}
+} */
 
 // look at this dude)))
 String weatherConditionMapper(
-    int sunsetTimeEpoch, int sunriseTimeEpoch, int iconId, bool useSmallIcons) {
-  var isDayTime = isDayTheme(sunsetTimeEpoch, sunriseTimeEpoch);
+    int sunsetTimeEpoch, int iconId, bool useSmallIcons) {
+  var isDayTime = isDayTheme(sunsetTimeEpoch);
 
   // Thunderstorm
   if (iconId >= 200 && iconId <= 232) {

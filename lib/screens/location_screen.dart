@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:weather_app/data_sources/api/weather_api.dart';
 import 'package:weather_app/screens/weather_forecast_screen.dart';
+import 'package:weather_app/widgets/search_city_screen/background.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({Key? key}) : super(key: key);
@@ -36,11 +37,16 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-          child: SpinKitFadingCircle(
-        color: Colors.black,
-      )),
+    return Scaffold(
+      body: Stack(
+        children: [
+          SearchBackgroundView(),
+          Center(
+              child: SpinKitFadingCircle(
+            color: Colors.white,
+          ))
+        ],
+      ),
     );
   }
 }
