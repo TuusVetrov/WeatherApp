@@ -5,7 +5,6 @@ import 'package:weather_app/core/theme/app_fonts_wrapper.dart';
 import 'package:weather_app/core/utils/converters.dart';
 import 'package:weather_app/data_sources/api/weather_api.dart';
 import 'package:weather_app/entitys/weather_forecast_entity.dart';
-import 'package:weather_app/models/weather_forecast_model.dart';
 
 class WeatherForecastItem extends StatelessWidget {
   final AsyncSnapshot<AllWeatherData> snapshot;
@@ -60,7 +59,7 @@ class WeatherForecastItem extends StatelessWidget {
                     '${max.getAs(unit: TemperatureUnit.celsius)}°',
                     12,
                     AppColors.textWithoutBackgroundColor),
-                SizedBox(
+                const SizedBox(
                   width: 9,
                 ),
                 AppFontsWrapper.textBold(

@@ -3,15 +3,18 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:weather_app/data_sources/api/weather_api.dart';
 import 'package:weather_app/screens/search_city_screen.dart';
+import 'package:weather_app/widgets/search_city_screen/background.dart';
 import 'package:weather_app/widgets/weather_forecast_screen/background.dart';
 import 'package:weather_app/widgets/weather_forecast_screen/current_weather.dart';
 import 'package:weather_app/widgets/weather_forecast_screen/select_forecast.dart';
-import 'package:weather_app/widgets/weather_forecast_screen/weather_forecast_item.dart';
 
 class WeatherForecastScreen extends StatefulWidget {
   final AllWeatherData weatherData;
 
-  const WeatherForecastScreen({required this.weatherData});
+  const WeatherForecastScreen({
+    Key? key,
+    required this.weatherData,
+  }) : super(key: key);
 
   @override
   _WeatherForecastScreenState createState() => _WeatherForecastScreenState();
@@ -76,10 +79,14 @@ class _WeatherForecastScreenState extends State<WeatherForecastScreen> {
               ],
             );
           } else {
-            return const Center(
-                child: SpinKitFadingCircle(
-              color: Colors.black,
-            ));
+            return Stack(
+              children: const [
+                SearchBackgroundView(),
+                SafeArea(
+                  child: Center(child: Text('Incorect sity name\n Try again!')),
+                ),
+              ],
+            );
           }
         },
       ),

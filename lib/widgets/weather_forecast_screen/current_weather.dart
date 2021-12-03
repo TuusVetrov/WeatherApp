@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:weather_app/core/theme/app_colors.dart';
 import 'package:weather_app/core/theme/app_fonts_wrapper.dart';
 import 'package:weather_app/core/utils/converters.dart';
@@ -8,7 +9,10 @@ import 'package:weather_app/data_sources/api/weather_api.dart';
 class CurrentWeatherView extends StatelessWidget {
   final AsyncSnapshot<AllWeatherData> snapshot;
 
-  const CurrentWeatherView({required this.snapshot});
+  const CurrentWeatherView({
+    Key? key,
+    required this.snapshot,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

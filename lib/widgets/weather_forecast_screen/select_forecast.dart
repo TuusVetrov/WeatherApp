@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:weather_app/core/theme/app_colors.dart';
 import 'package:weather_app/core/theme/app_fonts_wrapper.dart';
 import 'package:weather_app/data_sources/api/weather_api.dart';
@@ -7,7 +8,10 @@ import 'package:weather_app/widgets/weather_forecast_screen/weather_forecast_ite
 class SelectForecastView extends StatefulWidget {
   final AsyncSnapshot<AllWeatherData> snapshot;
 
-  SelectForecastView({required this.snapshot});
+  const SelectForecastView({
+    Key? key,
+    required this.snapshot,
+  }) : super(key: key);
 
   @override
   State<SelectForecastView> createState() => _SelectForecastViewState();

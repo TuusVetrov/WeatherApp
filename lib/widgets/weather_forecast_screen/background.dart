@@ -19,7 +19,7 @@ class BackgroundView extends StatelessWidget {
           gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: isDayTheme(
+        colors: compareCurrentTimeTo(
           snapshot.data!.weatherForecastModel.current.sunset,
         )
             ? AppColors.dayGradientColor
