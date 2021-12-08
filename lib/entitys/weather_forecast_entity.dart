@@ -1,9 +1,10 @@
 import 'package:weather_app/core/utils/converters.dart';
+import 'package:weather_app/models/weather_forecast_model.dart';
 
 class WeatherForecastEntity {
-  final CurrentForecastEntity current;
-  final List<HourlyForecastEntity> hourly;
-  final List<DailyForecastEntity> daily;
+  final CurrentForecastModel current;
+  final List<HourlyForecastModel> hourly;
+  final List<DailyForecastModel> daily;
 
   WeatherForecastEntity({
     required this.current,
@@ -24,7 +25,7 @@ class CurrentForecastEntity {
   final int visibility;
   final WindSpeed windSpeed;
   final WindDegrees windDeg;
-  final List<WeatherEntity> weather;
+  final List<WeatherModel> weather;
 
   CurrentForecastEntity({
     required this.dt,
@@ -45,7 +46,7 @@ class CurrentForecastEntity {
 class HourlyForecastEntity {
   final int dt;
   final Temperature temperature;
-  final List<WeatherEntity> weather;
+  final List<WeatherModel> weather;
 
   HourlyForecastEntity({
     required this.dt,
@@ -56,15 +57,21 @@ class HourlyForecastEntity {
 
 class DailyForecastEntity {
   final int dt;
+  final TempDailyModel tempDaily;
+  final List<WeatherModel> weather;
+
+  DailyForecastEntity({
+    required this.dt,
+    required this.tempDaily,
+    required this.weather,
+  });
+}
+
+class TempDailyEntity {
   final Temperature minTemperature;
   final Temperature maxTemperature;
-  final List<WeatherEntity> weather;
 
-  DailyForecastEntity(
-      {required this.dt,
-      required this.minTemperature,
-      required this.maxTemperature,
-      required this.weather});
+  TempDailyEntity({required this.minTemperature, required this.maxTemperature});
 }
 
 class WeatherEntity {

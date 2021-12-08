@@ -2,20 +2,45 @@ import 'package:weather_app/entitys/city_info_entity.dart';
 
 class CityInfoModel extends CityInfoEntity {
   CityInfoModel({
-    required double latitude,
-    required double longitude,
+    required CoordModel coord,
     required String cityName,
   }) : super(
-          latitude: latitude,
-          longitude: longitude,
+          coord: coord,
           cityName: cityName,
         );
 
   factory CityInfoModel.fromJson(Map<String, dynamic> json) {
     return CityInfoModel(
-      latitude: json['coord']['lat'] as double,
-      longitude: json['coord']['lon'] as double,
+      coord: CoordModel.fromJson(json['coord'] as Map<String, dynamic>),
       cityName: json['name'] as String,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'coord': coord.toJson(),
+      'name': cityName,
+    };
+  }
+}
+
+class CoordModel extends CoordEntity {
+  CoordModel({
+    required double latitude,
+    required double longitude,
+  }) : super(latitude: latitude, longitude: longitude);
+
+  factory CoordModel.fromJson(Map<String, dynamic> json) {
+    return CoordModel(
+      latitude: json['lat'] as double,
+      longitude: json['lon'] as double,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'lat': latitude,
+      'lon': longitude,
+    };
   }
 }

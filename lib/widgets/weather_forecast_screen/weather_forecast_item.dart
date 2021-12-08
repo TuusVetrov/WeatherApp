@@ -14,7 +14,8 @@ class WeatherForecastItem extends StatelessWidget {
       {Key? key, required this.snapshot, required this.tab})
       : super(key: key);
 
-  Widget columnDataHourly(int dt, int sunset, Temperature temp, int iconId) {
+  Widget columnDataHourly(
+      int dt, int sunset, int sunrise, Temperature temp, int iconId) {
     return Column(
       children: [
         AppFontsWrapper.textBold(
@@ -22,7 +23,7 @@ class WeatherForecastItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 24),
           child: SvgPicture.asset(
-            weatherConditionMapper(sunset, iconId, true),
+            weatherConditionMapper(sunset, sunrise, iconId, true),
             color: Colors.grey,
           ),
         ),
@@ -37,8 +38,8 @@ class WeatherForecastItem extends StatelessWidget {
     );
   }
 
-  Widget columnDataDaily(
-      int dt, int sunset, Temperature max, Temperature min, int iconId) {
+  Widget columnDataDaily(int dt, int sunset, int sunrise, Temperature max,
+      Temperature min, int iconId) {
     return Column(
       children: [
         AppFontsWrapper.textBold(
@@ -46,7 +47,7 @@ class WeatherForecastItem extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 24),
           child: SvgPicture.asset(
-            weatherConditionMapper(sunset, iconId, true),
+            weatherConditionMapper(sunset, sunrise, iconId, true),
             color: Colors.grey,
           ),
         ),
@@ -109,6 +110,7 @@ class WeatherForecastItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var sunset = snapshot.data!.weatherForecastModel.current.sunset;
+    var sunrise = snapshot.data!.weatherForecastModel.current.sunrise;
     var current = snapshot.data!.weatherForecastModel.current;
     var hourly = snapshot.data!.weatherForecastModel.hourly;
     var daily = snapshot.data!.weatherForecastModel.daily;
@@ -124,15 +126,20 @@ class WeatherForecastItem extends StatelessWidget {
             for (var item in hourly)
               Padding(
                 padding: const EdgeInsets.only(right: 32),
-                child: columnDataHourly(
-                    item.dt, sunset, item.temperature, item.weather[0].id),
+                child: columnDataHourly(item.dt, sunset, sunrise,
+                    item.temperature, item.weather[0].id),
               ),
           if (tab == 1)
             for (var item in daily)
               Padding(
                 padding: const EdgeInsets.only(right: 32),
-                child: columnDataDaily(item.dt, sunset, item.maxTemperature,
-                    item.minTemperature, item.weather[0].id),
+                child: columnDataDaily(
+                    item.dt,
+                    sunset,
+                    sunrise,
+                    item.tempDaily.maxTemperature,
+                    item.tempDaily.minTemperature,
+                    item.weather[0].id),
               ),
           if (tab == 2)
             Padding(

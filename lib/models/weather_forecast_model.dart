@@ -3,9 +3,9 @@ import 'package:weather_app/entitys/weather_forecast_entity.dart';
 
 class WeatherForecastModel extends WeatherForecastEntity {
   WeatherForecastModel({
-    required CurrentForecastEntity current,
-    required List<HourlyForecastEntity> hourly,
-    required List<DailyForecastEntity> daily,
+    required CurrentForecastModel current,
+    required List<HourlyForecastModel> hourly,
+    required List<DailyForecastModel> daily,
   }) : super(
           current: current,
           hourly: hourly,
@@ -26,6 +26,15 @@ class WeatherForecastModel extends WeatherForecastEntity {
           .toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'current': current.toJson(),
+      'hourly':
+          hourly.map((HourlyForecastModel value) => value.toJson()).toList(),
+      'daily': daily.map((DailyForecastModel value) => value.toJson()).toList(),
+    };
+  }
 }
 
 class CurrentForecastModel extends CurrentForecastEntity {
@@ -41,7 +50,7 @@ class CurrentForecastModel extends CurrentForecastEntity {
     required int visibility,
     required WindSpeed windSpeed,
     required WindDegrees windDeg,
-    required List<WeatherEntity> weather,
+    required List<WeatherModel> weather,
   }) : super(
           dt: dt,
           sunrise: sunrise,
@@ -75,13 +84,30 @@ class CurrentForecastModel extends CurrentForecastEntity {
       windSpeed: WindSpeed(jsonToDouble(json['wind_speed'])),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'dt': dt,
+      'feels_like': feelsLike.getAs(unit: TemperatureUnit.kelvin),
+      'humidity': humidity,
+      'pressure': pressure,
+      'sunrise': sunrise,
+      'sunset': sunset,
+      'temp': temperature.getAs(unit: TemperatureUnit.kelvin),
+      'uvi': uvIndex,
+      'visibility': visibility,
+      'weather': weather.map((WeatherModel value) => value.toJson()).toList(),
+      'wind_deg': windDeg.getAs(unit: WindDegreesUnit.degrees),
+      'wind_speed': windSpeed.getAs(unit: WindSpeedUnit.meterSec),
+    };
+  }
 }
 
 class HourlyForecastModel extends HourlyForecastEntity {
   HourlyForecastModel({
     required int dt,
     required Temperature temperature,
-    required List<WeatherEntity> weather,
+    required List<WeatherModel> weather,
   }) : super(
           dt: dt,
           temperature: temperature,
@@ -97,29 +123,63 @@ class HourlyForecastModel extends HourlyForecastEntity {
           .toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'dt': dt,
+      'temp': temperature.getAs(unit: TemperatureUnit.kelvin),
+      'weather': weather.map((WeatherModel value) => value.toJson()).toList(),
+    };
+  }
 }
 
 class DailyForecastModel extends DailyForecastEntity {
   DailyForecastModel({
     required int dt,
-    required Temperature minTemperature,
-    required Temperature maxTemperature,
-    required List<WeatherEntity> weather,
-  }) : super(
-            dt: dt,
-            minTemperature: minTemperature,
-            maxTemperature: maxTemperature,
-            weather: weather);
+    required TempDailyModel tempDaily,
+    required List<WeatherModel> weather,
+  }) : super(dt: dt, tempDaily: tempDaily, weather: weather);
 
   factory DailyForecastModel.fromJson(Map<String, dynamic> json) {
     return DailyForecastModel(
       dt: json['dt'] as int,
-      minTemperature: Temperature(jsonToDouble(json['temp']['min'])),
-      maxTemperature: Temperature(jsonToDouble(json['temp']['max'])),
+      tempDaily: TempDailyModel.fromJson(json['temp'] as Map<String, dynamic>),
       weather: (json['weather'] as List<dynamic>)
           .map((dynamic e) => WeatherModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'dt': dt,
+      'temp': tempDaily.toJson(),
+      'weather': weather.map((WeatherModel value) => value.toJson()).toList(),
+    };
+  }
+}
+
+class TempDailyModel extends TempDailyEntity {
+  TempDailyModel({
+    required Temperature minTemperature,
+    required Temperature maxTemperature,
+  }) : super(
+          minTemperature: minTemperature,
+          maxTemperature: maxTemperature,
+        );
+
+  factory TempDailyModel.fromJson(Map<String, dynamic> json) {
+    return TempDailyModel(
+      minTemperature: Temperature(jsonToDouble(json['min'])),
+      maxTemperature: Temperature(jsonToDouble(json['max'])),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'min': minTemperature.getAs(unit: TemperatureUnit.kelvin),
+      'max': maxTemperature.getAs(unit: TemperatureUnit.kelvin),
+    };
   }
 }
 

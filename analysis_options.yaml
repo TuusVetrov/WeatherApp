@@ -2,8 +2,8 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
+    implicit-casts: true
+    implicit-dynamic: true
   exclude:
     - '**/*.g.dart'
 

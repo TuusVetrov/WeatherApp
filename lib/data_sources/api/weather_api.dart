@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:weather_app/core/utils/location.dart';
+import 'package:weather_app/data_sources/local_data_source.dart';
 import 'package:weather_app/models/coordinates_model.dart';
 
 import 'package:weather_app/models/weather_forecast_model.dart';
@@ -19,15 +20,35 @@ class WeatherApi {
 
   Future<AllWeatherData> getWeatherData({String? cityName}) async {
     CityInfoModel location;
-    if (cityName == null) {
-      location = await getCityInfo();
+    WeatherForecastModel weatherData;
+
+    var lastUpdate = await getLastUpdate();
+    var currentTime = DateTime.now();
+
+    if (lastUpdate != null &&
+        currentTime.isBefore(lastUpdate.add(const Duration(minutes: 30))) &&
+        cityName == null) {
+      location = await getLastCityDataFromCache();
+      weatherData = await getLastWeatherDataFromCache();
     } else {
-      location = await getCityInfo(cityName: cityName);
+      if (cityName == null) {
+        location = await getCityInfo();
+      } else {
+        location = await getCityInfo(cityName: cityName);
+      }
+
+      await weatherCityToCache(location);
+
+      weatherData = await getWeatherDataByLocation(
+          location.coord.latitude, location.coord.longitude);
+
+      await weatherDataToCache(weatherData);
+
+      await saveLastUpdate();
     }
-    var weather =
-        await getWeatherDataByLocation(location.latitude, location.longitude);
+
     return AllWeatherData(
-        cityInfoModel: location, weatherForecastModel: weather);
+        cityInfoModel: location, weatherForecastModel: weatherData);
   }
 
   Future<WeatherForecastModel> getWeatherDataByLocation(

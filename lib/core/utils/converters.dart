@@ -115,20 +115,27 @@ String getDay(int dt) {
   return DateFormat('EEE').format(getTimeForamted(dt).toLocal());
 }
 
-bool compareCurrentTimeTo(int sunsetTimeEpoch) {
-  var currentTime = DateFormat('HH:mm').format(DateTime.now());
-  var sunsetTime = getTime(sunsetTimeEpoch);
+bool isDayTheme(int sunsetTimeEpoch, int sunriseTimeEpoch) {
+  var currentTime = DateTime.now();
+  var sunsetTime = DateTime.fromMillisecondsSinceEpoch(sunsetTimeEpoch * 1000);
+  var sunriseTime =
+      DateTime.fromMillisecondsSinceEpoch(sunriseTimeEpoch * 1000);
 
-  // currentTime.compareTo()
-  print("current ${currentTime} = susnset ${sunsetTime} $sunsetTimeEpoch");
+  print('Current: $currentTime Sunset: $sunsetTime Sunrise: $sunriseTime');
+  print(
+      '${currentTime.isAfter(sunsetTime)} ${currentTime.isAfter(sunsetTime)}');
+
+  if (currentTime.isAfter(sunsetTime) && currentTime.isAfter(sunsetTime)) {
+    return false;
+  }
 
   return true;
 }
 
 // look at this dude)))
 String weatherConditionMapper(
-    int sunsetTimeEpoch, int iconId, bool useSmallIcons) {
-  var isDayTime = compareCurrentTimeTo(sunsetTimeEpoch);
+    int sunsetTimeEpoch, int sunriseTimeEpoch, int iconId, bool useSmallIcons) {
+  var isDayTime = isDayTheme(sunsetTimeEpoch, sunriseTimeEpoch);
 
   // Thunderstorm
   if (iconId >= 200 && iconId <= 232) {

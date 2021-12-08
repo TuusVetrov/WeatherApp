@@ -34,6 +34,7 @@ class CurrentWeatherView extends StatelessWidget {
                 children: [
                   SvgPicture.asset(weatherConditionMapper(
                       snapshot.data!.weatherForecastModel.current.sunset,
+                      snapshot.data!.weatherForecastModel.current.sunrise,
                       snapshot.data!.weatherForecastModel.current.weather[0].id,
                       false)),
                   Padding(
@@ -64,7 +65,7 @@ class CurrentWeatherView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 31),
                     child: AppFontsWrapper.textMedium(
-                        '${snapshot.data!.weatherForecastModel.daily[0].maxTemperature.getAs(unit: TemperatureUnit.celsius)}°',
+                        '${snapshot.data!.weatherForecastModel.daily[0].tempDaily.maxTemperature.getAs(unit: TemperatureUnit.celsius)}°',
                         17,
                         AppColors.textOnBackgroundColor),
                   ),
@@ -73,7 +74,7 @@ class CurrentWeatherView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8),
                     child: AppFontsWrapper.textMedium(
-                        '${snapshot.data!.weatherForecastModel.daily[0].minTemperature.getAs(unit: TemperatureUnit.celsius)}°',
+                        '${snapshot.data!.weatherForecastModel.daily[0].tempDaily.minTemperature.getAs(unit: TemperatureUnit.celsius)}°',
                         17,
                         AppColors.textOnBackgroundColor),
                   ),
